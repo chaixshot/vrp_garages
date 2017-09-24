@@ -82,7 +82,7 @@ function vRPgt.spawnGarageVehicle(vtype, name, vehicle_plate, vehicle_colorprima
       SetEntityInvincible(nveh,false)
       SetPedIntoVehicle(GetPlayerPed(-1),nveh,-1) -- put player inside
       SetVehicleNumberPlateText(nveh, "P " .. vRP.getRegistrationNumber({}))
-      Citizen.InvokeNative(0xAD738C3085FE7E11, nveh, true, true) -- set as mission entity
+      Citizen.InvokeNative(0xAD738C3085FE7E11, veh, true, true) -- set as mission entity
       SetVehicleHasBeenOwnedByPlayer(nveh,true)
 	  vehicle_migration = false
       if not vehicle_migration then
