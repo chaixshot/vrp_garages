@@ -1,6 +1,9 @@
 # vrp_garages
 fx-server only, requires my vrp_lscustoms
 
+Support me and my scripts on Patreon:  
+[![Support me and my scripts on Patreon](http://i.imgur.com/dyePK6Q.png)](https://www.patreon.com/Sighmir)  
+***********************************************************************************************************************************
 Add:
 ```
 AddEventHandler('vrp_garages:setVehicle', function(vtype, vehicle)
