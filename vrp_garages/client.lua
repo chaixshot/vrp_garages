@@ -12,10 +12,14 @@ local inrangeofgarage = false
 local currentlocation = nil
 
 local garages = {
-  {name="Garage", colour=3, id=357, x=215.124, y=-791.377, z=29.646, h=0.0},
+	{name="Garage", colour=3, id=357, x=215.124, y=-791.377, z=29.646, h=0.0},
     {name="Garage", colour=3, id=357, x=-334.685, y=289.773, z=84.705, h=0.0},
     {name="Garage", colour=3, id=357, x=-55.272, y=-1838.71, z=25.442, h=0.0},
     {name="Garage", colour=3, id=357, x=126.434, y=6610.04, z=30.750, h=0.0},
+    {name="Garage", colour=3, id=357, x=1868.5115966797, y=3682.5786132813, z=32.652965545654, h=0.0},
+    {name="Garage", colour=3, id=357, x=107.85456085205, y=-1079.6723632813, z=28.192796707153, h=0.0},
+    {name="Garage", colour=3, id=357, x=-331.27365112305, y=-969.25299072266, z=30.080623626709, h=0.0},
+    {name="Garage", colour=3, id=357, x=-61.847499847412, y=-1116.3942871094, z=25.433839797974, h=0.0},
 }
 
 vehicles = {}
@@ -30,7 +34,7 @@ menu4 = "Vehicles",
 menu5 = "Options",
 menu6 = "Get",
 menu7 = "Back",
-menu8 = "~g~E~s~ to open menu",
+menu8 = "~g~E~s~ to open garages",
 menu9 = "Sell",
 menu10 = "~g~E~s~ to sell the vehicle at 50% of the purchase price",
 menu11 = "Update the vehicle",
@@ -211,7 +215,15 @@ function vRPgt.spawnGarageVehicle(vtype, name, vehicle_plate, vehicle_colorprima
       SetVehicleWindowTint(nveh,tonumber(windowtint))
     end
   else
-    vRP.notify({"You can only have one "..vtype.." vehicule out."})
+    -- vRP.notify({"You can only have one "..vtype.." vehicule out."})
+	exports.pNotify:SendNotification({
+		text = "คุณมียานพาหนะข้างนอกได้แค่ 1 คันเท่านั้น",
+		type = "error",
+		theme= "mint",
+		timeout = 6000,
+		layout = "bottomCenter",
+		queue = "left"
+	})
   end
 end
 
@@ -260,7 +272,15 @@ function vRPgt.spawnBoughtVehicle(vtype, name)
       SetModelAsNoLongerNeeded(mhash)
     end
   else
-    vRP.notify({"You can only have one "..vtype.." vehicule out."})
+    -- vRP.notify({"You can only have one "..vtype.." vehicule out."})
+	exports.pNotify:SendNotification({
+		text = "คุณมียานพาหนะข้างนอกได้แค่ 1 คันเท่านั้น",
+		type = "error",
+		theme= "mint",
+		timeout = 6000,
+		layout = "bottomCenter",
+		queue = "left"
+	})
   end
 end
 
@@ -277,12 +297,36 @@ function vRPgt.despawnGarageVehicle(vtype,max_range)
       SetVehicleAsNoLongerNeeded(Citizen.PointerValueIntInitialized(vehicle[3]))
       Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(vehicle[3]))
 	  TriggerEvent("vrp_garages:setVehicle", vtype, nil)
-      vRP.notify({"~g~Vehicle stored."})
+      -- vRP.notify({"~g~Vehicle stored."})
+	  exports.pNotify:SendNotification({
+		text = "เก็บยานพาหนะแล้ว",
+		type = "success",
+		theme= "mint",
+		timeout = 6000,
+		layout = "bottomCenter",
+		queue = "left"
+	  })
     else
-      vRP.notify({"~r~Too far away from the vehicle."})
+      -- vRP.notify({"~r~Too far away from the vehicle."})
+	  exports.pNotify:SendNotification({
+		text = "ยานพาหนะของคุณอยู่ไกลเกินไป",
+		type = "error",
+		theme= "mint",
+		timeout = 6000,
+		layout = "bottomCenter",
+		queue = "left"
+	})
     end
   else
-  vRP.notify({"~r~You don't have a personal vehicle out."})
+  -- vRP.notify({"~r~You don't have a personal vehicle out."})
+  exports.pNotify:SendNotification({
+		text = "คุณไม่มียานพาหนะส่วนตัวอยู่ข้างนอก",
+		type = "error",
+		theme= "mint",
+		timeout = 6000,
+		layout = "bottomCenter",
+		queue = "left"
+	})
   end
 end
 
@@ -314,6 +358,40 @@ function StoreVehicle()
   CloseMenu()
 end
 
+local Carname = {
+	["blista"] = "Blista",["brioso"] = "Brioso R/A",["Dilettante"] = "Dilettante",["issi2"] = "Issi",["panto"] = "Panto",["prairie"] = "Prairie",
+	["rhapsody"] = "Rhapsody",["cogcabrio"] = "Cognoscenti Cabrio",["exemplar"] = "Exemplar",["f620"] = "F620",["felon"] = "Felon",["felon2"] = "Felon GT",
+	["jackal"] = "Jackal",["oracle"] = "Oracle",["oracle2"] = "Oracle XS",["sentinel"] = "Sentinel",["sentinel2"] = "Sentinel XS",["windsor"] = "Windsor",
+	["windsor2"] = "Windsor Drop",["zion"] = "Zion",["zion2"] = "Zion Cabrio",["ninef"] = "9F",["ninef2"] = "9F Cabrio",["alpha"] = "Alpha",
+	["banshee"] = "Banshee",["bestiagts"] = "Bestia GTS",["buffalo"] = "Buffalo",["buffalo2"] = "Buffalo S",
+	["carbonizzare"] = "Carbonizzare",["comet2"] = "Comet",["coquette"] = "Coquette",["tampa2"] = "Drift Tampa",["feltzer2"] = "Feltzer",
+	["furoregt"] = "Furore GT",["fusilade"] = "Fusilade",["jester"] = "Jester",["jester2"] = "Jester(Racecar)",["kuruma"] = "Kuruma",["lynx"] = "Lynx",
+	["massacro"] = "Massacro",["massacro2"] = "Massacro(Racecar)",["omnis"] = "Omnis",["penumbra"] = "Penumbra",["rapidgt"] = "Rapid GT",
+	["rapidgt2"] = "Rapid GT Convertible",["schafter3"] = "Schafter V12",["sultan"] = "Sultan",["surano"] = "Surano",["tropos"] = "Tropos",
+	["verlierer2"] = "Verkierer",["casco"] = "Casco",["coquette2"] = "Coquette Classic",["jb700"] = "JB 700",["pigalle"] = "Pigalle",
+	["stinger"] = "Stinger",["stingergt"] = "Stinger GT",["feltzer3"] = "Stirling GT",["ztype"] = "Z-Type",["adder"] = "Adder",
+	["banshee2"] = "Banshee 900R",["bullet"] = "Bullet",["cheetah"] = "Cheetah",["entityxf"] = "Entity XF",["sheava"] = "ETR1",["fmj"] = "FMJ",
+	["infernus"] = "Infernus",["osiris"] = "Osiris",["le7b"] = "RE-7B",["reaper"] = "Reaper",["sultanrs"] = "Sultan RS",["t20"] = "T20",
+	["turismor"] = "Turismo R",["tyrus"] = "Tyrus",["vacca"] = "Vacca",["voltic"] = "Voltic",["prototipo"] = "X80 Proto",["zentorno"] = "Zentorno",
+	["blade"] = "Blade",["buccaneer"] = "Buccaneer",["chino"] = "Chino",["coquette3"] = "Coquette BlackFin",["dominator"] = "Dominator",
+	["dukes"] = "Dukes",["gauntlet"] = "Gauntlet",["hotknife"] = "Hotknife",["faction"] = "Faction",["nightshade"] = "Nightshade",
+	["picador"] = "Picador",["sabregt"] = "Sabre Turbo",["tampa"] = "Tampa",["virgo"] = "Virgo",["vigero"] = "Vigero",["bifta"] = "Bifta",
+	["blazer"] = "Blazer",["brawler"] = "Brawler",["dubsta3"] = "Bubsta 6x6",["dune"] = "Dune Buggy",["rebel2"] = "Rebel",["sandking"] = "Sandking",
+	["monster"] = "The Liberator",["trophytruck"] = "Trophy Truck",["baller"] = "Baller",["cavalcade"] = "Cavalcade",["granger"] = "Grabger",
+	["huntley"] = "Huntley S",["landstalker"] = "Landstalker",["radi"] = "Radius",["rocoto"] = "Rocoto",["seminole"] = "Seminole",["xls"] = "XLS",
+	["bison"] = "Bison",["bobcatxl"] = "Bobcat XL",["gburrito"] = "Gang Burrito",["journey"] = "Journey",["minivan"] = "Minivan",["paradise"] = "Paradise",
+	["rumpo"] = "Rumpo",["surfer"] = "Surfer",["youga"] = "Youga",["asea"] = "Asea",["asterope"] = "Asterope",["cognoscenti"] = "Cognoscenti",
+	["cognoscenti2"] = "Cognoscenti(Armored)",["cog55"] = "Cognoscenti 55",["cog552"] = "Cognoscenti 55(Armored",["fugitive"] = "Fugitive",
+	["glendale"] = "Glendale",["ingot"] = "Ingot",["intruder"] = "Intruder",["premier"] = "Premier",["primo"] = "Primo",["primo2"] = "Primo Custom",
+	["regina"] = "Regina",["schafter2"] = "Schafter",["stanier"] = "Stanier",["stratum"] = "Stratum",["stretch"] = "Stretch",["superd"] = "Super Diamond",
+	["surge"] = "Surge",["tailgater"] = "Tailgater",["warrener"] = "Warrener",["washington"] = "Washington",["AKUMA"] = "Akuma",["bagger"] = "Bagger",
+	["bati"] = "Bati 801",["bati2"] = "Bati 801RR",["bf400"] = "BF400",["carbonrs"] = "Carbon RS",["cliffhanger"] = "Cliffhanger",
+	["daemon"] = "Daemon",["double"] = "Double T",["enduro"] = "Enduro",["faggio2"] = "Faggio",["gargoyle"] = "Gargoyle",["hakuchou"] = "Hakuchou",
+	["hexer"] = "Hexer",["innovation"] = "Innovation",["lectro"] = "Lectro",["nemesis"] = "Nemesis",["pcj"] = "PCJ-600",["ruffian"] = "Ruffian",
+	["sanchez"] = "Sanchez",["sovereign"] = "Sovereign",["thrust"] = "Thrust",["vader"] = "Vader",["vindicator"] = "Vindicator",
+}
+
+
 function ListVehicle(page)
     ped = GetPlayerPed(-1)
 	selectedPage = page
@@ -322,7 +400,7 @@ function ListVehicle(page)
 	local count = 0
     for ind, value in pairs(GVEHICLES) do
 	  if ((count >= (page*10)) and (count < ((page*10)+10))) then
-        Menu.addButton(tostring(value.vehicle_name), "OptionVehicle", value.vehicle_name)
+        Menu.addButton(Carname[tostring(value.vehicle_name)], "OptionVehicle", value.vehicle_name)
 	  end
 	  count = count + 1
     end   
@@ -388,14 +466,19 @@ function ply_drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 end
 
 --[[Citizen]]--
-
+function garages_DisplayHelpText(str)
+	SetTextComponentFormat("STRING")
+	AddTextComponentString(str)
+	DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+end
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     for _, garage in pairs(garages) do
       DrawMarker(1, garage.x, garage.y, garage.z, 0, 0, 0, 0, 0, 0, 3.001, 3.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
       if GetDistanceBetweenCoords(garage.x, garage.y, garage.z, GetEntityCoords(LocalPed())) < 3 and IsPedInAnyVehicle(LocalPed(), true) == false then
-        ply_drawTxt(lang_string.menu8,0,1,0.5,0.8,0.6,255,255,255,255)
+        -- ply_drawTxt(lang_string.menu8,0,1,0.5,0.8,0.6,255,255,255,255)
+		garages_DisplayHelpText("Press ~INPUT_CONTEXT~ to open garages")
         if IsControlJustPressed(1, 86) then
           garageSelected.x = garage.x
           garageSelected.y = garage.y
